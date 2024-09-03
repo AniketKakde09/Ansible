@@ -15,7 +15,7 @@
 ### **How to Install Ansible Using Python's pip (Version 3.8.19)**
 #### This guide will guide you through the process of installing Ansible using pip with Python version 3.8.19. Please refer to the Ansible Installation Guide for more details.  [Ansible Documentation](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#pip-install)  
   - `Step 1: Install Ansible and Ansible Core Open your terminal and execute the following commands to install Ansible and its core components using pip:`  
-  <br>
+
     ```shell
     pip3 install --user ansible
     pip3 install --user ansible-core
@@ -25,19 +25,19 @@
 
 - `Step 2: Update Your PATH Environment Variable After installation, you may need to add the Ansible binary location to your PATH environment variable to ensure that the ansible command is recognized.`  
   - Locate the installation path: Typically, Ansible is installed in ~/.local/bin/. Verify this by running:
-    <br>
+    
     ```shell
     echo $PATH
     ```
   - Add to PATH: If the installation path is not in your PATH, add it by running:
-    <br>
+    
     ```shell
     export PATH="$HOME/.local/bin:$PATH"
     ```
   - To make this change permanent, add the export line to your shell configuration file (e.g., .bashrc, .zshrc).
   
   - Verify the Installation: Finally, verify that Ansible is installed correctly by checking its version:
-    <br>
+    
     ```shell
     ansible --version
     ```
