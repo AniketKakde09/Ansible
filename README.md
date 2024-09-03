@@ -46,3 +46,97 @@ ssh-copy-id -i <file_path> <user>@<ip/host>
 ssh <user>@<ip/host>
 ```
 Note: The control node is where Ansible is installed, and the managed node is your target node.
+
+### Inventory
+1. Definition: The inventory is a fundamental component of Ansible that defines details of remote systems to be managed.
+2. Purpose: It provides information about remote hosts during Ansible operations.
+Here’s an example of an inventory file:
+```ini
+# File: inventory.ini
+[middleware_servers]
+<user>@<hostname/ip>
+<user>@<hostname/ip>
+
+[log_servers]
+<user>@<hostname/ip>
+<user>@<hostname/ip>
+```
+
+### Playbook
+What is an Ansible Playbook? A playbook in Ansible is a YAML file that defines the steps to manage a system’s configuration or tasks.
+Playbook Structure:
+YAML files start with ---.
+You declare name, hosts, and remote-user.
+Under tasks, define your tasks as required.
+Here’s an example:
+
+```text
+# File: first_playbook.yml
+---
+- hosts: all
+  tasks:
+   - name: "Create Hello_World.txt file on all managed nodes"
+     ansible.builtin.shell: |
+      cd "/home/ansible"
+      touch Hello_World.txt
+      ls -l
+```
+This example creates a Hello_World.txt file in the /home/ansible path on all managed nodes.
+
+### Ansible Modules
+1. Definition: Ansible modules are units of code that can control system resources or execute system commands.
+2. Module Library: Ansible provides a library of modules that can be executed directly on remote hosts or through playbooks. Custom modules can also be created.
+3. Commonly Used Modules: Examples include ansible.builtin.copy, ansible.builtin.command, ansible.builtin.file.
+
+### Executing Your First Ansible Ad-Hoc Command
+1. Create inventory.ini file: List all your target servers in it.
+2. Execute a Ping Command:
+```bash
+ansible -i inventory.ini -m ping all
+```
+expected output
+```json
+<User>@<IP/HostName> | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+This indicates that the control and managed nodes can communicate with each other.
+
+
+### Executing Your First Ansible Playbook
+1. Create inventory.ini file: Include all your target servers.
+2. Create YAML Playbook: Save the following content as first-playbook.yml:
+```yaml
+---
+- hosts: all
+  tasks:
+    - name: "Create File on all managed nodes"
+      ansible.builtin.shell: |
+        echo "creating file Ansible.txt"
+        touch Ansible.txt
+```
+3. Run the Playbook: Execute it using:
+```bash
+ansible-playbook -i inventory.ini first-playbook.yml 
+```
+
+expected output:
+```markdown
+PLAY [all] *******************************************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************************************
+ok: [<user>@<IP/Hostname>]
+
+TASK [Create file on all managed servers] ************************************************************************************
+changed: [<user>@<Hostname>]
+
+PLAY RECAP *******************************************************************************************************************
+<user>@<Hostname>      : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+
+### Conclusion
+Ansible is a powerful tool that simplifies IT automation tasks through its agentless architecture and straightforward playbook system. By following this guide, you’ve learned how to install Ansible, configure passwordless SSH connections, create an inventory file, and write and execute your first playbook. These foundational steps will help you automate various IT processes efficiently and effectively.
