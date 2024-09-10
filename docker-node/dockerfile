@@ -18,6 +18,7 @@ RUN useradd -m appadmin && \
 # Grant appadmin passwordless sudo access
 RUN cp /etc/sudoers /etc/sudoers_update
 RUN echo 'appadmin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN apt update
 
 # Start SSH service and keep the container running
 CMD service ssh start && tail -f /dev/null
