@@ -1,0 +1,23 @@
+# Use the official Ubuntu image as the base
+FROM ubuntu:latest
+
+# Update the package list and install ssh and python3
+RUN apt-get update && \
+    apt-get install -y openssh-server python3 sudo && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Configure SSH service
+RUN mkdir /var/run/sshd && \
+    echo 'root:root' | chpasswd && \
+    sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Add a new user and set password
+RUN useradd -m appadmin && \
+    echo 'appadmin:appadmin' | chpasswd
+
+# Grant appadmin passwordless sudo access
+RUN cp /etc/sudoers /etc/sudoers_update
+RUN echo 'appadmin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Start SSH service and keep the container running
+CMD service ssh start && tail -f /dev/null
