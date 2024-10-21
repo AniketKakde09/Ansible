@@ -584,41 +584,39 @@ A playbook in Ansible is a YAML file that defines the steps to manage a systemâ€
         **How to Use**   
         When you set ignore_errors: yes in a task, it tells Ansible to proceed with the rest of the playbook, even if that specific task fails.
 
-        **Example**
+        **Example 1: YAML file example without using ignore_errors.**
 
-        1. **YAML file example without using ignore_errors.**  
+        ```yaml
+        ---
+        - hosts: web
+          tasks:
+            - name: "Example of ignore_errors in ansible."
+              ansible.builtin.shell: |
+                echo "This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail"
+                exit 1
+              register: ShellModuleOutput
 
-          ```yaml
-          ---
-          - hosts: web
-            tasks:
-              - name: "Example of ignore_errors in ansible."
-                ansible.builtin.shell: |
-                  echo "This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail"
-                  exit 1
-                register: ShellModuleOutput
+            - name: "Print Output of Module :- Example of ignore_errors in ansible."
+              debug:
+                var: ShellModuleOutput
+          ```
 
-              - name: "Print Output of Module :- Example of ignore_errors in ansible."
-                debug:
-                  var: ShellModuleOutput
-            ```   
+          **Output**
 
-            **Output**
+          ```bash
+          PLAY [web] *******************************************************************************************************************
 
-            ```bash
-            PLAY [web] *******************************************************************************************************************
+          TASK [Gathering Facts] *******************************************************************************************************
+          ok: [appadmin@172.18.1.3]
 
-            TASK [Gathering Facts] *******************************************************************************************************
-            ok: [appadmin@172.18.1.3]
+          TASK [Example of ignore_errors in ansible.] **********************************************************************************
+          fatal: [appadmin@172.18.1.3]: FAILED! => {"changed": true, "cmd": "echo \"This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail\"\nexit 1\n", "delta": "0:00:00.004080", "end": "2024-10-21 10:45:44.611746", "msg": "non-zero return code", "rc": 1, "start": "2024-10-21 10:45:44.607666", "stderr": "", "stderr_lines": [], "stdout": "This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail", "stdout_lines": ["This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail"]}
 
-            TASK [Example of ignore_errors in ansible.] **********************************************************************************
-            fatal: [appadmin@172.18.1.3]: FAILED! => {"changed": true, "cmd": "echo \"This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail\"\nexit 1\n", "delta": "0:00:00.004080", "end": "2024-10-21 10:45:44.611746", "msg": "non-zero return code", "rc": 1, "start": "2024-10-21 10:45:44.607666", "stderr": "", "stderr_lines": [], "stdout": "This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail", "stdout_lines": ["This is example of ignore_errors, in the below commmand we are setting exit code to 1 so that this module can fail"]}
+          PLAY RECAP *******************************************************************************************************************
+          appadmin@172.18.1.3        : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+          ```
 
-            PLAY RECAP *******************************************************************************************************************
-            appadmin@172.18.1.3        : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
-            ```
-
-        2. **YAML file example with using ignore_errors.**
+          **Example 2: YAML file example with using ignore_errors.**
 
           ```yaml
           ---
@@ -671,6 +669,7 @@ A playbook in Ansible is a YAML file that defines the steps to manage a systemâ€
           PLAY RECAP *******************************************************************************************************************
           appadmin@172.18.1.3        : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1
           ```
+          
       - **Ignoring unreachable host errors (ignore_unreachable)**   
 
         In Ansible, when a host is unreachable (for example, due to a network issue or an SSH failure), the default behavior is to stop running tasks for that host. However, if you want to continue executing tasks on unreachable hosts or control how unreachable hosts are handled, you can use the ignore_unreachable directive.
