@@ -66,7 +66,7 @@
         ```
 - ### `Understanding Ansible Architecture`
 
-    - ![Ansible Architecture](./ansible-architecture.png)  
+    - ![Ansible Architecture](./ansible-arch.png)  
 
     - **`1. Control Node:`**
         - This is the central machine where Ansible is installed.
